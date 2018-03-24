@@ -61,8 +61,11 @@ class MotorBoardMD49 :
                 buf = b'\x00' + cmdByte + valueByte
             else :
                 buf = b'\x00' + cmdByte
-            res = self._uart.write(buf)
-            return ( res is not None and res == len(buf) )
+            for i in range(100) :
+                res = self._uart.write(buf)
+                if res is not None and res == len(buf) :
+                    return True
+                sleep_ms(10)
         return False
 
     # ----------------------------------------------------------------------------
